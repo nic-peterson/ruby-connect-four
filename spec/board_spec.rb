@@ -137,7 +137,8 @@ describe Board do
       it 'returns true' do
         # Set up the board for a horizontal win
         4.times { |i| board_horizontal.add_piece(i, 'X') }
-        expect(board_horizontal.winning_combination?).to be true
+        x_wins_h = board_horizontal.winning_combination?('X')
+        expect(x_wins_h).to be true
       end
     end
 
@@ -149,8 +150,10 @@ describe Board do
         # Set up the board for a vertical win
         4.times { board_vertical.add_piece(0, 'X') }
 
-        winner = board_vertical.winning_combination?
-        expect(winner).to eq(true)
+        # winner = board_vertical.winning_combination?
+        # expect(winner).to eq(true)
+        x_wins_v = board_vertical.winning_combination?('X')
+        expect(x_wins_v).to be true
       end
     end
   end
