@@ -14,4 +14,8 @@ class Game
     @current_player = @player1
     @board.reset_board
   end
+
+  def switch_players
+    @current_player = @current_player == @player1 ? @player2 : @player1
+  end
 end

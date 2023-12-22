@@ -29,4 +29,17 @@ describe Game do
       expect(board).to have_received(:reset_board)
     end
   end
+
+  describe '#switch_players' do
+    it 'switches the current player to other player' do
+      game.switch_players
+      expect(game.current_player).to eq(player2)
+    end
+
+    it 'switches the current player back to the original player' do
+      game.switch_players
+      game.switch_players
+      expect(game.current_player).to eq(player1)
+    end
+  end
 end
