@@ -18,4 +18,12 @@ class Game
   def switch_players
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
+
+  def get_player_input
+    '1'
+  end
+
+  def verify_input(input)
+    return input if input.between?(0, 5)
+  end
 end
