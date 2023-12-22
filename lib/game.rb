@@ -8,6 +8,8 @@ class Game
     @player1 = player1
     @player2 = player2
     @board = board
+    @min = 0
+    @max = 5
   end
 
   def setup_game
@@ -19,7 +21,7 @@ class Game
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
 
-  def get_player_input
+  def player_input
     loop do
       user_input = gets.chomp
       verified_number = verify_input(user_input.to_i) if user_input.match?(/^\d+$/)
@@ -30,6 +32,6 @@ class Game
   end
 
   def verify_input(input)
-    return input if input.between?(0, 5)
+    return input if input.between?(@min, @max)
   end
 end

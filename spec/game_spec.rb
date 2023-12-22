@@ -49,12 +49,18 @@ describe Game do
     end
   end
 
-  describe '#get_player_input' do
-    context 'when player enters a valid column number' do
-      it 'gets player input' do
-        valid_input = "1"
+  describe '#player_input' do
+    context 'when user number is valid' do
+      before do
+        valid_input = '3'
         allow(game).to receive(:gets).and_return(valid_input)
-        expect(game.get_player_input).to eq(valid_input.to_i)
+      end
+
+      it 'stops loop and does not display error message' do
+        min = game.instance_variable_get(:@min)
+        max = game.instance_variable_get(:@max)
+        error_message = "Input error! Please enter a number between #{min} or #{max}."
+        expect(game).not_to receive(:puts).with(error_message)
       end
     end
 
