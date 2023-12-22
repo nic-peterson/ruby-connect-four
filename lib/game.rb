@@ -39,4 +39,12 @@ class Game
   def update_board(column)
     @board.add_piece(column, @current_player.symbol)
   end
+
+  def check_winner
+    if @board.winning_combination?
+      @current_player
+    else
+      nil
+    end
+  end
 end

@@ -24,4 +24,11 @@ class Board
   def reset_board
     @board = create_initial_board
   end
+
+  def winning_combination?
+    # true
+    # horizontal_win?(symbol) ||
+    #  vertical_win?(symbol) ||
+    #  diagonal_win?(symbol)
+  end
 end

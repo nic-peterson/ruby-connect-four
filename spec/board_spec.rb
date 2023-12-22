@@ -18,6 +18,40 @@ describe Board do
     end
   end
 
+  subject(:add_board) { described_class.new() }
+  describe '#add_piece' do
+    let(:column) { 3 }
+    let(:symbol) { 'X' }
+
+    context 'when the column is empty' do
+      it 'adds a piece to the board in the specified column' do
+        add_board.add_piece(column, symbol)
+        bottom_row = add_board.board.last
+
+        expect(bottom_row[column]).to eq(symbol)
+      end
+    end
+
+    context 'when the column is not empty' do
+      it 'stacks on top of the existing piece' do
+        2.times { add_board.add_piece(column, symbol) }
+        second_to_last_row = add_board.board[-2]
+
+        expect(second_to_last_row[column]).to eq(symbol)
+      end
+    end
+
+    context 'when the column is full' do
+      it 'does not add a piece to the board' do
+        6.times { add_board.add_piece(column, symbol) } # Fill the column
+        add_board.add_piece(column, symbol) # Attempt to add another piece
+
+        piece_count = add_board.board.map { |row| row[column] }.count(symbol)
+        expect(piece_count).to eq(6)
+      end
+    end
+  end
+
   describe '#draw' do
     context "when the game starts and players see an empty board" do
       it 'prints an board to the console' do
@@ -95,5 +129,8 @@ describe Board do
       initial_board = Array.new(6) { Array.new(7, '.') }
       expect(game_board.board).to eq(initial_board)
     end
+  end
+
+  describe '#winning_combination?' do
   end
 end

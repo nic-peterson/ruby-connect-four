@@ -136,4 +136,24 @@ describe Game do
       expect(board).to have_received(:add_piece).with(column, game.current_player.symbol)
     end
   end
+
+  describe '#check_winner' do
+    context 'when there is a winner' do
+      it 'returns that there is a' do
+        # Setup the board in a winning state. Assume Player1 is the winner.
+        allow(board).to receive(:winning_combination?).and_return(true)
+
+        winner = game.check_winner
+        expect(winner).to eq(player1)
+      end
+    end
+
+    context 'when there is no winner' do
+      it 'returns nil' do
+        allow(board).to receive(:winning_combination?).and_return(false)
+        winner = game.check_winner
+        expect(winner).to eq(nil)
+      end
+    end
+  end
 end
