@@ -51,10 +51,10 @@ describe Game do
 
   describe '#get_player_input' do
     context 'when player enters a valid column number' do
-      xit 'gets player input' do
+      it 'gets player input' do
         valid_input = "1"
         allow(game).to receive(:gets).and_return(valid_input)
-        expect(game.get_player_input).to eq(valid_input)
+        expect(game.get_player_input).to eq(valid_input.to_i)
       end
     end
 

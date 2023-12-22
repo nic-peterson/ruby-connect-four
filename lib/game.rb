@@ -20,7 +20,13 @@ class Game
   end
 
   def get_player_input
-    '1'
+    loop do
+      user_input = gets.chomp
+      verified_number = verify_input(user_input.to_i) if user_input.match?(/^\d+$/)
+      return verified_number if verified_number
+
+      puts "Input error! Please enter a number between #{min} or #{max}."
+    end
   end
 
   def verify_input(input)
