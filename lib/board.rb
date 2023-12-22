@@ -1,8 +1,8 @@
 class Board
-  attr_reader :grid
+  attr_reader :board
 
   def initialize
-    @grid = create_initial_board
+    @board = create_initial_board
   end
 
   def create_initial_board
@@ -10,14 +10,18 @@ class Board
   end
 
   def draw
-    @grid.each do |row|
+    @board.each do |row|
       puts row.join(' ')
     end
   end
 
   def add_piece(column, symbol)
     # Assuming the bottom row is the first to be filled
-    row = @grid.reverse.find { |r| r[column] == '.' }
+    row = @board.reverse.find { |r| r[column] == '.' }
     row[column] = symbol if row
+  end
+
+  def reset_board
+    @board = create_initial_board
   end
 end

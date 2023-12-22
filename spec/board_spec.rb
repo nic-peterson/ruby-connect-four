@@ -6,9 +6,9 @@ describe Board do
   describe '#create_initial_board' do
     it 'creates a 6x7 board filled with dots' do
       game_board = Board.new
-      expect(game_board.grid).to be_a(Array)
-      expect(game_board.grid.length).to eq(6) # 6 rows
-      game_board.grid.each do |row|
+      expect(game_board.board).to be_a(Array)
+      expect(game_board.board.length).to eq(6) # 6 rows
+      game_board.board.each do |row|
         expect(row).to be_a(Array)
         expect(row.length).to eq(7) # 7 columns
         row.each do |cell|
@@ -84,6 +84,16 @@ describe Board do
 
         expect { game_board.draw }.to output(expected_output).to_stdout
       end
+    end
+  end
+
+  describe '#reset_board' do
+    it 'resets the board to its initial state' do
+      game_board.add_piece(3, 'X') # Assuming add_piece method exists
+      game_board.reset_board
+
+      initial_board = Array.new(6) { Array.new(7, '.') }
+      expect(game_board.board).to eq(initial_board)
     end
   end
 end
