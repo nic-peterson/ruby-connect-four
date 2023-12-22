@@ -97,14 +97,6 @@ describe Game do
         game.player_input
       end
     end
-
-    # When player enters an invalid column number
-
-    # When player enters a column number that is already full
-
-    # When player enters a non-numeric value
-
-    # When player enters a column number that is out of range
   end
 
   describe '#verify_input' do
@@ -127,6 +119,21 @@ describe Game do
         verified_input = game_verify_input.verify_input(valid_input)
         expect(verified_input).to eq(nil)
       end
+    end
+  end
+
+  describe '#update_board' do
+    let(:column) { 3 }
+
+    before do
+      allow(player1).to receive_messages(name: "Alice", symbol: "X")
+
+      allow(board).to receive(:add_piece)
+      game.update_board(column)
+    end
+
+    it 'adds a piece to the board in the specified column' do
+      expect(board).to have_received(:add_piece).with(column, game.current_player.symbol)
     end
   end
 end

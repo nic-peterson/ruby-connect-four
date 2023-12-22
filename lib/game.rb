@@ -10,6 +10,7 @@ class Game
     @board = board
     @min = 0
     @max = 5
+    @current_player = @player1
   end
 
   def setup_game
@@ -33,5 +34,9 @@ class Game
 
   def verify_input(input)
     return input if input.between?(@min, @max)
+  end
+
+  def update_board(column)
+    @board.add_piece(column, @current_player.symbol)
   end
 end
