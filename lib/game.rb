@@ -41,7 +41,7 @@ class Game
   end
 
   def check_winner
-    if @board.winning_combination?
+    if @board.winning_combination?(@current_player.symbol)
       @current_player
     else
       nil

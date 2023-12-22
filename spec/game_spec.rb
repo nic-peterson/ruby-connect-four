@@ -139,10 +139,10 @@ describe Game do
 
   describe '#check_winner' do
     context 'when there is a winner' do
-      it 'returns that there is a' do
+      it 'returns that there is a winner' do
         # Setup the board in a winning state. Assume Player1 is the winner.
-        allow(board).to receive(:winning_combination?).and_return(true)
-
+        allow(player1).to receive_messages(name: "Alice", symbol: "X")
+        allow(board).to receive(:winning_combination?).with(player1.symbol).and_return(true)
         winner = game.check_winner
         expect(winner).to eq(player1)
       end
@@ -150,7 +150,8 @@ describe Game do
 
     context 'when there is no winner' do
       it 'returns nil' do
-        allow(board).to receive(:winning_combination?).and_return(false)
+        allow(player1).to receive_messages(name: "Alice", symbol: "X")
+        allow(board).to receive(:winning_combination?).with(player1.symbol).and_return(false)
         winner = game.check_winner
         expect(winner).to eq(nil)
       end
