@@ -61,6 +61,40 @@ describe Game do
         max = game.instance_variable_get(:@max)
         error_message = "Input error! Please enter a number between #{min} or #{max}."
         expect(game).not_to receive(:puts).with(error_message)
+        game.player_input
+      end
+    end
+
+    context 'when user inputs an incorrect value once, then a valid input' do
+      before do
+        letter = 'q'
+        valid_input = '3'
+        allow(game).to receive(:gets).and_return(letter, valid_input)
+      end
+
+      it 'completes loop and displays error message once' do
+        min = game.instance_variable_get(:@min)
+        max = game.instance_variable_get(:@max)
+        error_message = "Input error! Please enter a number between #{min} or #{max}."
+        expect(game).to receive(:puts).with(error_message).once
+        game.player_input
+      end
+    end
+
+    context 'when user inputs two incorrect values, then a valid input' do
+      before do
+        letter = 'q'
+        number = '100'
+        valid_input = '3'
+        allow(game).to receive(:gets).and_return(letter, number, valid_input)
+      end
+
+      it 'completes loop and displays error message twice' do
+        min = game.instance_variable_get(:@min)
+        max = game.instance_variable_get(:@max)
+        error_message = "Input error! Please enter a number between #{min} or #{max}."
+        expect(game).to receive(:puts).with(error_message).twice
+        game.player_input
       end
     end
 
@@ -72,6 +106,7 @@ describe Game do
 
     # When player enters a column number that is out of range
   end
+
   describe '#verify_input' do
     let(:player1) { instance_double("Player") } # Player.new("Alice", "X")
     let(:player2) { instance_double("Player") } # Player.new("Bob", "O")

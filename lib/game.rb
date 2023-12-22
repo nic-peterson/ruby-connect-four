@@ -2,7 +2,7 @@ require_relative '../lib/player'
 require_relative '../lib/board'
 
 class Game
-  attr_reader :player1, :player2, :board, :current_player
+  attr_reader :player1, :player2, :board, :current_player, :min, :max
 
   def initialize(player1, player2, board)
     @player1 = player1
