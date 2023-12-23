@@ -177,7 +177,6 @@ describe Board do
 
       let(:board_diagonal_r2l) { described_class.new() }
       it 'returns true for top-left to bottom-right' do
-        # let(:board_diagonal_r2l) { described_class.new() }
         # Set up a diagonal win from top-right to bottom-left
         # Assuming the board's width is 7 (columns 0 to 6)
         4.times do |i|
@@ -191,59 +190,22 @@ describe Board do
         end
 
         puts "Board state before checking for win:"
-        # puts board_diagonal_r2l.inspect
+
         board_diagonal_r2l.draw
 
         winner = board_diagonal_r2l.winning_combination?('X')
         expect(winner).to eq(true)
       end
     end
-  end
-end
-
-=begin
- context 'when there is a diagonal win' do
-      let(:board_diagonal_l2r) { described_class.new() }
-      # Set up a diagonal win from top-left to bottom-right
-      # Assuming board[0][0] is the top-left and board[5][6] is the bottom-right
-      4.times do |i|
-        # Add 'O' pieces to simulate the stacking effect
-        i.times { board_diagonal_l2r.add_piece(i, 'O') }
-
-        # Add the 'X' piece
-        board_diagonal_l2r.add_piece(i, 'X')
-      end
-      it 'returns true for top-left to bottom-right' do
-        winner = board_diagonal_l2r.winning_combination?
-        expect(winner).to eq(true)
-      end
-
-      xit 'returns true for top-right to bottom-left' do
-        let(:board_diagonal_r2l) { described_class.new() }
-        # Set up a diagonal win from top-right to bottom-left
-        # Assuming the board's width is 7 (columns 0 to 6)
-        4.times do |i|
-          column = 6 - i
-
-          # Add 'O' pieces to simulate the stacking effect
-          i.times { board_diagonal_r2l.add_piece(column, 'O') }
-
-          # Add the 'X' piece
-          board_diagonal_r2l.add_piece(column, 'X')
-        end
-
-        winner = board_diagonal_r2l.winning_combination?
-        expect(winner).to eq(true)
-      end
-    end
 
     context 'when there is no winner' do
-      xit 'returns false' do
+      it 'returns false' do
         # Setup the board in a winning state. Assume Player1 is the winner.
         allow(game_board).to receive(:winning_combination?).and_return(false)
 
-        winner = game_board.winning_combination?
+        winner = game_board.winning_combination?('X')
         expect(winner).to eq(false)
       end
     end
-=end
+  end
+end
