@@ -156,6 +156,48 @@ describe Board do
         expect(x_wins_v).to be true
       end
     end
+
+    context 'when there is a diagonal win' do
+      let(:board_diagonal_l2r) { described_class.new() }
+      it 'returns true for bottom-left to top-right' do
+        4.times do |i|
+          # Add 'O' pieces to simulate the stacking effect
+          i.times { board_diagonal_l2r.add_piece(i, 'O') }
+
+          # Add the 'X' piece
+          board_diagonal_l2r.add_piece(i, 'X')
+        end
+
+        puts "Board state before checking for win:"
+        board_diagonal_l2r.draw
+
+        winner = board_diagonal_l2r.winning_combination?('X')
+        expect(winner).to eq(true)
+      end
+
+      let(:board_diagonal_r2l) { described_class.new() }
+      it 'returns true for top-left to bottom-right' do
+        # let(:board_diagonal_r2l) { described_class.new() }
+        # Set up a diagonal win from top-right to bottom-left
+        # Assuming the board's width is 7 (columns 0 to 6)
+        4.times do |i|
+          column = 6 - i
+
+          # Add 'O' pieces to simulate the stacking effect
+          i.times { board_diagonal_r2l.add_piece(column, 'O') }
+
+          # Add the 'X' piece
+          board_diagonal_r2l.add_piece(column, 'X')
+        end
+
+        puts "Board state before checking for win:"
+        # puts board_diagonal_r2l.inspect
+        board_diagonal_r2l.draw
+
+        winner = board_diagonal_r2l.winning_combination?('X')
+        expect(winner).to eq(true)
+      end
+    end
   end
 end
 

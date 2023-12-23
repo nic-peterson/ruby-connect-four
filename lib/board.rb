@@ -27,8 +27,7 @@ class Board
 
   def winning_combination?(symbol)
     # true
-    horizontal_win?(symbol) || vertical_win?(symbol) ## ||
-    #  diagonal_win?(symbol)
+    horizontal_win?(symbol) || vertical_win?(symbol) || diagonal_win?(symbol)
   end
 
   private
@@ -52,9 +51,18 @@ class Board
   end
 
   def diagonals
-    [
-      (0...@board.size).collect { |i| @board[i][i] },
-      (0...@board.size).collect { |i| @board[i][@board.size - i - 1] }
-    ]
+    # Get all diagonals from left to right
+    left_to_right = []
+    (3 - @board.size).upto(@board[0].size - 4) do |offset|
+      left_to_right << (0...@board.size).collect { |i| @board[i][i + offset] if i + offset < @board[0].size }.compact
+    end
+
+    # Get all diagonals from right to left
+    right_to_left = []
+    3.upto(@board[0].size + @board.size - 5) do |offset|
+      right_to_left << (0...@board.size).collect { |i| @board[i][offset - i] if offset - i < @board[0].size }.compact
+    end
+
+    left_to_right + right_to_left
   end
 end
