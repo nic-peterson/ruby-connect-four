@@ -13,6 +13,8 @@ class Board
     @board.each do |row|
       puts row.join(' ')
     end
+    cols = [0, 1, 2, 3, 4, 5, 6]
+    puts cols.join(' ')
   end
 
   def add_piece(column, symbol)
@@ -28,6 +30,15 @@ class Board
   def winning_combination?(symbol)
     # true
     horizontal_win?(symbol) || vertical_win?(symbol) || diagonal_win?(symbol)
+  end
+
+  def create_stalemate_board
+    @board = Array.new(6) { Array.new(7) }
+    7.times do |j|
+      6.times do |i|
+        @board[i][j] = ((j % 3 == 0 && i.even?) || (j % 3 != 0 && i.odd?)) ? 'X' : 'O'
+      end
+    end
   end
 
   private
@@ -66,3 +77,8 @@ class Board
     left_to_right + right_to_left
   end
 end
+
+board = Board.new
+board.create_stalemate_board
+
+board.draw

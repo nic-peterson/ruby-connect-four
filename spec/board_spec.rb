@@ -63,6 +63,7 @@ describe Board do
           . . . . . . .
           . . . . . . .
           . . . . . . .
+          0 1 2 3 4 5 6
         BOARD
         expect { board.draw }.to output(expected_output).to_stdout
       end
@@ -79,6 +80,7 @@ describe Board do
           . . . . . . .
           . . . . . . .
           . . . X . . .
+          0 1 2 3 4 5 6
         BOARD
 
         expect { game_board.draw }.to output(expected_output).to_stdout
@@ -97,6 +99,7 @@ describe Board do
           . . . . . . .
           . . . O . . .
           . . . X . . .
+          0 1 2 3 4 5 6
         BOARD
 
         expect { game_board.draw }.to output(expected_output).to_stdout
@@ -114,6 +117,7 @@ describe Board do
           . . . . . . .
           . . . . . . .
           . . . X O . .
+          0 1 2 3 4 5 6
         BOARD
 
         expect { game_board.draw }.to output(expected_output).to_stdout
@@ -168,9 +172,6 @@ describe Board do
           board_diagonal_l2r.add_piece(i, 'X')
         end
 
-        puts "Board state before checking for win:"
-        board_diagonal_l2r.draw
-
         winner = board_diagonal_l2r.winning_combination?('X')
         expect(winner).to eq(true)
       end
@@ -189,10 +190,6 @@ describe Board do
           board_diagonal_r2l.add_piece(column, 'X')
         end
 
-        puts "Board state before checking for win:"
-
-        board_diagonal_r2l.draw
-
         winner = board_diagonal_r2l.winning_combination?('X')
         expect(winner).to eq(true)
       end
@@ -206,6 +203,22 @@ describe Board do
         winner = game_board.winning_combination?('X')
         expect(winner).to eq(false)
       end
+    end
+  end
+
+  describe '#create_statemale_board' do
+    subject(:stalemate_board) { described_class.new() }
+    it 'creates a board with alternating pieces' do
+      stalemate_board.create_stalemate_board
+      expected_board = [
+        %w[X O O X O O X],
+        %w[O X X O X X O],
+        %w[X O O X O O X],
+        %w[O X X O X X O],
+        %w[X O O X O O X],
+        %w[O X X O X X O],
+      ]
+      expect(stalemate_board.board).to eq(expected_board)
     end
   end
 end

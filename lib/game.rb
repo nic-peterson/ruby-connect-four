@@ -47,4 +47,16 @@ class Game
       nil
     end
   end
+
+  def check_draw
+  end
+
+  def announce_results
+  end
+
+  def game_over?
+  end
+
+  def play
+  end
 end
