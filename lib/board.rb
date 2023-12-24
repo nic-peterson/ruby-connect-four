@@ -41,6 +41,12 @@ class Board
     end
   end
 
+  def is_full?
+    @board.all? do |row|
+      row.all? { |cell| cell != '.' }
+    end
+  end
+
   private
 
   def horizontal_win?(symbol)
@@ -77,8 +83,3 @@ class Board
     left_to_right + right_to_left
   end
 end
-
-board = Board.new
-board.create_stalemate_board
-
-board.draw

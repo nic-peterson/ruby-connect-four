@@ -157,4 +157,22 @@ describe Game do
       end
     end
   end
+
+  describe '#check_draw' do
+    let(:player1_draw) { instance_double("Player") } # Player.new("Alice", "X")
+    let(:player2_draw) { instance_double("Player") } # Player.new("Bob", "O")
+    let(:stalemate_board) { instance_double("Board") } # Board.new
+    subject(:game_check_draw) { described_class.new(player1_draw, player2_draw, stalemate_board) }
+
+    context 'check for a draw' do
+      it 'returns true' do
+        allow(stalemate_board).to receive(:create_stalemate_board)
+
+        allow(player1_draw).to receive_messages(name: "Alice", symbol: "X")
+        allow(stalemate_board).to receive(:winning_combination?).with(player1_draw.symbol).and_return(false)
+        game_check_draw.check_draw
+        expect(draw).to eq(true)
+      end
+    end
+  end
 end
