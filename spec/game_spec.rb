@@ -167,10 +167,15 @@ describe Game do
     context 'check for a draw' do
       it 'returns true' do
         allow(stalemate_board).to receive(:create_stalemate_board)
+        allow(stalemate_board).to receive(:is_full?).and_return(true)
 
-        allow(player1_draw).to receive_messages(name: "Alice", symbol: "X")
+        # allow(player1_draw).to receive_messages(name: "Alice", symbol: "X")
+        allow(player1_draw).to receive(:symbol).and_return('X')
+        # allow(player1_draw).to receive_messages(name: "Bob", symbol: "O")
+        allow(player2_draw).to receive(:symbol).and_return('O')
         allow(stalemate_board).to receive(:winning_combination?).with(player1_draw.symbol).and_return(false)
-        game_check_draw.check_draw
+        allow(stalemate_board).to receive(:winning_combination?).with(player2_draw.symbol).and_return(false)
+        draw = game_check_draw.check_draw
         expect(draw).to eq(true)
       end
     end

@@ -49,6 +49,15 @@ class Game
   end
 
   def check_draw
+    if @board.is_full?
+      if @board.winning_combination?(@player1.symbol) || @board.winning_combination?(@player2.symbol)
+        return false
+      else
+        return true
+      end
+    else
+      return false
+    end
   end
 
   def announce_results
