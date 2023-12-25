@@ -49,18 +49,27 @@ class Game
   end
 
   def check_draw
+    # Check if board is full and no winning combination
     if @board.is_full?
+      # Check if there is a winning combination return false
       if @board.winning_combination?(@player1.symbol) || @board.winning_combination?(@player2.symbol)
         return false
+      # If there is no winning combination return true => draw
       else
         return true
       end
+    # If board is not full return false, not a draw YET
     else
       return false
     end
   end
 
   def announce_results
+    if check_winner
+      puts "#{check_winner.symbol} wins!"
+    elsif check_draw
+      puts "It's a draw!"
+    end
   end
 
   def game_over?

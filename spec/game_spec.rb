@@ -208,4 +208,38 @@ describe Game do
       end
     end
   end
+
+  describe '#announce_results' do
+    let(:player1_results) { instance_double("Player") } # Player.new("Alice", "X")
+    let(:player2_results) { instance_double("Player") } # Player.new("Bob", "O")
+    let(:board_results) { instance_double("Board") } # Board.new
+    subject(:game_results) { described_class.new(player1_results, player2_results, board_results) }
+    context 'when there is a winner' do
+      it 'displays the winner -> player1' do
+        allow(player1).to receive_messages(name: "Alice", symbol: "X")
+        allow(game_results).to receive(:check_winner).and_return(player1)
+        winner_message = "X wins!"
+        expect(game_results).to receive(:puts).with(winner_message)
+        game_results.announce_results
+      end
+      it 'displays the winner -> player2' do
+        allow(player2).to receive_messages(name: "Bob", symbol: "O")
+        allow(game_results).to receive(:check_winner).and_return(player2)
+        winner_message = "O wins!"
+        expect(game_results).to receive(:puts).with(winner_message)
+        game_results.announce_results
+      end
+    end
+
+    context 'when there is a draw' do
+      it 'displays that there is a draw' do
+        allow(game_results).to receive(:check_winner).and_return(nil)
+        allow(game_results).to receive(:check_draw).and_return(true)
+
+        draw_message = "It's a draw!"
+        expect(game_results).to receive(:puts).with(draw_message)
+        game_results.announce_results
+      end
+    end
+  end
 end
