@@ -242,4 +242,37 @@ describe Game do
       end
     end
   end
+
+  describe '#game_over?' do
+    let(:player1_over) { instance_double("Player") } # Player.new("Alice", "X")
+    let(:player2_over) { instance_double("Player") } # Player.new("Bob", "O")
+    let(:board_over) { instance_double("Board") } # Board.new
+    subject(:game_over) { described_class.new(player1_over, player2_over, board_over) }
+
+    context 'when there is a winner' do
+      it 'returns true' do
+        allow(game_over).to receive(:check_winner).and_return(player1_over)
+        result = game_over.game_over?
+        expect(result).to eq(true)
+      end
+    end
+
+    context 'when there is a draw' do
+      it 'returns true' do
+        allow(game_over).to receive(:check_winner).and_return(nil)
+        allow(game_over).to receive(:check_draw).and_return(true)
+        result = game_over.game_over?
+        expect(result).to eq(true)
+      end
+    end
+
+    context 'when there is no winner and no draw' do
+      it 'returns false' do
+        allow(game_over).to receive(:check_winner).and_return(nil)
+        allow(game_over).to receive(:check_draw).and_return(false)
+        result = game_over.game_over?
+        expect(result).to eq(false)
+      end
+    end
+  end
 end

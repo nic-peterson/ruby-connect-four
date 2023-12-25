@@ -73,6 +73,13 @@ class Game
   end
 
   def game_over?
+    if check_winner
+      return true
+    elsif check_draw
+      return true
+    else
+      return false
+    end
   end
 
   def play
