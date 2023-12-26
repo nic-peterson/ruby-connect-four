@@ -42,9 +42,13 @@ class Board
     end
   end
 
+  def column_full?(column)
+    @board.all? { |row| row[column] != EMPTY_CELL }
+  end
+
   def board_full?
     @board.all? do |row|
-      row.all? { |cell| cell != '.' }
+      row.all? { |cell| cell != EMPTY_CELL }
     end
   end
 

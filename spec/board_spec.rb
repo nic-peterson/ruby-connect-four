@@ -2,6 +2,7 @@ require_relative '../lib/board.rb'
 
 describe Board do
   subject(:game_board) { described_class.new() }
+  let(:column) { 3 } # Example column index
 
   describe '#create_initial_board' do
     it 'creates a 6x7 board filled with dots' do
@@ -240,6 +241,24 @@ describe Board do
         2.times { add_board.add_piece(column, symbol) }
         board_full = game_board.board_full?
         expect(board_full).to eq(false)
+      end
+    end
+  end
+
+  describe '#column_full?' do
+    context 'when the column is not full' do
+      it 'returns false' do
+        # Setup for a non-full column
+        game_board.add_piece(column, 'X')
+        expect(game_board.column_full?(column)).to be false
+      end
+    end
+
+    context 'when the column is full' do
+      it 'returns true' do
+        # Fill the column
+        (0...game_board.board.size).each { game_board.add_piece(column, 'X') }
+        expect(game_board.column_full?(column)).to be true
       end
     end
   end
