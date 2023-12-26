@@ -222,13 +222,13 @@ describe Board do
     end
   end
 
-  describe '#is_full?' do
+  describe '#board_full?' do
     subject(:full_board) { described_class.new() }
     context 'when the board is full' do
       it 'returns true' do
         full_board.create_stalemate_board
-        is_full = full_board.is_full?
-        expect(is_full).to eq(true)
+        board_full = full_board.board_full?
+        expect(board_full).to eq(true)
       end
     end
 
@@ -238,8 +238,8 @@ describe Board do
       let(:symbol) { 'X' }
       it 'returns false' do
         2.times { add_board.add_piece(column, symbol) }
-        is_full = game_board.is_full?
-        expect(is_full).to eq(false)
+        board_full = game_board.board_full?
+        expect(board_full).to eq(false)
       end
     end
   end

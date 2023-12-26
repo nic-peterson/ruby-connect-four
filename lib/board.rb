@@ -1,4 +1,5 @@
 class Board
+  EMPTY_CELL = '.'
   attr_reader :board
 
   def initialize
@@ -6,7 +7,7 @@ class Board
   end
 
   def create_initial_board
-    Array.new(6) { Array.new(7, '.') }
+    Array.new(6) { Array.new(7, EMPTY_CELL) }
   end
 
   def draw
@@ -41,7 +42,7 @@ class Board
     end
   end
 
-  def is_full?
+  def board_full?
     @board.all? do |row|
       row.all? { |cell| cell != '.' }
     end
