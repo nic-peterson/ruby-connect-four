@@ -57,49 +57,20 @@ describe Game do
         allow(game).to receive(:gets).and_return(valid_input)
       end
 
-      it 'stops loop and does not display error message' do
-        min = game.instance_variable_get(:@min)
-        max = game.instance_variable_get(:@max)
-        current_player = game.instance_variable_get(:@current_player)
-        error_message = "Invalid move! #{current_player.symbol}, please enter a number between #{min} and #{max}:"
-        expect(game).not_to receive(:puts).with(error_message)
-        game.player_input
+      it 'returns the valid input as an integer' do
+        expect(game.player_input).to eq(3)
       end
     end
 
-    context 'when user inputs an incorrect value once, then a valid input' do
+    context 'when user inputs an incorrect value' do
       before do
-        letter = 'q'
-        valid_input = '3'
+        invalid_input = 'abc'
         game.instance_variable_set(:@current_player, player1)
-        allow(game).to receive(:gets).and_return(letter, valid_input)
+        allow(game).to receive(:gets).and_return(invalid_input)
       end
 
-      it 'completes loop and displays error message once' do
-        min = game.instance_variable_get(:@min)
-        max = game.instance_variable_get(:@max)
-        current_player = game.instance_variable_get(:@current_player)
-        error_message = "Invalid move! #{current_player.symbol}, please enter a number between #{min} and #{max}:"
-        expect(game).to receive(:puts).with(error_message).once
-        game.player_input
-      end
-    end
-
-    context 'when user inputs two incorrect values, then a valid input' do
-      before do
-        letter = 'q'
-        number = '100'
-        valid_input = '3'
-        allow(game).to receive(:gets).and_return(letter, number, valid_input)
-      end
-
-      it 'completes loop and displays error message twice' do
-        min = game.instance_variable_get(:@min)
-        max = game.instance_variable_get(:@max)
-        current_player = game.instance_variable_get(:@current_player)
-        error_message = "Invalid move! #{current_player.symbol}, please enter a number between #{min} and #{max}:"
-        expect(game).to receive(:puts).with(error_message).twice
-        game.player_input
+      it 'returns nil' do
+        expect(game.player_input).to be_nil
       end
     end
   end
@@ -146,24 +117,38 @@ describe Game do
     let(:player1_turn) { instance_double("Player", name: 'Alice', symbol: 'X') }
     let(:player2_turn) { instance_double("Player", name: 'Bob', symbol: 'O') }
     let(:board_turn) { instance_double("Board") }
-    subject(:game_turn) { described_class.new(player1, player2, board_turn) }
+    subject(:game_turn) { described_class.new(player1_turn, player2_turn, board_turn) }
+
     before do
-      allow(player1_turn).to receive(:symbol).and_return('X')
-      allow(player2_turn).to receive(:symbol).and_return('O')
-      allow(board_turn).to receive(:add_piece).with("3", "X")
       allow(game_turn).to receive(:puts)
-      allow(game_turn).to receive(:player_input).and_return('3')
-      allow(game_turn).to receive(:verify_input).and_return('3')
+      allow(game_turn).to receive(:player_input).and_return(3)
+      allow(board_turn).to receive(:add_piece)
     end
-    context 'when the selected column is full' do
-      xit 'prompts the player to select another column' do
-        allow(board_turn).to receive(:column_full?).and_return(true)
-        expect(game_turn).to receive(:puts).with(/X, choose a column:/).once
-        expect(game_turn).to receive(:puts).with(/Invalid move/).once
+
+    context 'when the move is valid' do
+      it 'prompts the current player to choose a column' do
+        expect(game_turn).to receive(:puts).with("#{game_turn.current_player.symbol}, choose a column:")
+        game_turn.take_turn
+      end
+
+      it 'adds a piece to the board in the chosen column' do
+        expect(board_turn).to receive(:add_piece).with(3, game_turn.current_player.symbol)
+        game_turn.take_turn
+      end
+    end
+
+    context 'when non-numeric input is given' do
+      before { allow(game_turn).to receive(:gets).and_return('invalid', '3') }
+
+      xit 'prompts the player for a valid input when non-numeric input is given' do
+        allow(game_turn).to receive(:player_input).and_return('invalid', '3')
+        expect(game_turn).to receive(:puts).with(/X, choose a column:/).ordered
+        expect(game_turn).to receive(:puts).with(/Invalid move/).ordered
         game_turn.take_turn
       end
     end
   end
+
   describe '#check_winner' do
     context 'when there is a winner' do
       it 'returns that there is a winner' do

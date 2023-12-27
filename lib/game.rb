@@ -24,13 +24,13 @@ class Game
 
   def take_turn
     loop do
-      puts "#{@current_player.name}, choose a column:"
+      puts "#{@current_player.symbol}, choose a column:"
       column = player_input
-      if @board.column_full?(column)
-        puts "Invalid move. Column is full. Please choose another column."
-      else
+      if column
         @board.add_piece(column, @current_player.symbol)
         break
+      else
+        puts "Invalid move! #{@current_player.symbol}, please enter a number between #{@min} and #{@max}:"
       end
     end
   end
@@ -85,23 +85,19 @@ class Game
   end
 
   def player_input
-    loop do
-      user_input = gets.chomp
-      verified_number = verify_input(user_input.to_i) if user_input.match?(/^\d+$/)
-      if verified_number
-        return verified_number
-      else
-        puts "Invalid move! #{@current_player.symbol}, please enter a number between #{@min} and #{@max}:"
-      end
+    user_input = gets.chomp
+    if user_input.match?(/^\d+$/)
+      verify_input(user_input.to_i)
+    else
+      nil
     end
   end
 
   def verify_input(input)
-    sanitized_input = input.to_i
-    if sanitized_input.between?(@min, @max)
-      return sanitized_input
+    if input.between?(@min, @max)
+      input
     else
-      return nil
+      nil
     end
   end
 
