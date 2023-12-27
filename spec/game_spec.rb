@@ -142,7 +142,7 @@ describe Game do
       game_turn.instance_variable_set(:@player1, player1_turn)
       game_turn.instance_variable_set(:@player2, player2_turn)
       allow(game_turn).to receive(:min).and_return(0)
-      allow(game_turn).to receive(:max).and_return(5)
+      allow(game_turn).to receive(:max).and_return(6)
     end
 
     context 'when non-numeric input is given' do
@@ -344,6 +344,52 @@ describe Game do
         result = game_over.game_over?
         expect(result).to eq(false)
       end
+    end
+  end
+
+  describe '#play' do
+    let(:player1_play) { instance_double("Player", name: 'Alice', symbol: 'X') } # Player.new("Alice", "X")
+    let(:player2_play) { instance_double("Player", name: 'Bob', symbol: 'O') } # Player.new("Bob", "O")
+    let(:board_play) { instance_double("Board") } # Board.new
+    subject(:game_play) { described_class.new(player1_play, player2_play, board_play) }
+
+    before do
+      allow(game_play).to receive(:puts)
+      allow(game_play).to receive(:take_turn)
+      allow(game_play).to receive(:check_winner).and_return(nil)
+      allow(board_play).to receive(:board_full?).and_return(false)
+      allow(game_play).to receive(:announce_results)
+    end
+
+    it 'alternates turns between players' do
+      allow(game_play).to receive(:take_turn)
+      allow(board_play).to receive(:draw) # Allow draw method to be called
+      allow(board_play).to receive(:board_full?).and_return(false, true) # Allow two turns, then end game
+      expect(game_play).to receive(:take_turn).twice
+      game_play.play
+    end
+
+    it 'checks for a winner after each turn' do
+      allow(game_play).to receive(:take_turn)
+      allow(board_play).to receive(:draw) # Allow draw method to be called
+      allow(board_play).to receive(:board_full?).and_return(false, true) # Allow two turns, then end game
+      expect(game_play).to receive(:check_winner).twice
+      game_play.play
+    end
+
+    it 'ends the game and announces the result when a winner is determined' do
+      allow(board_play).to receive(:draw) # Allow draw method to be called
+      allow(game_play).to receive(:check_winner).and_return(player1_play) # Assume player1 is the winner
+      expect(game_play).to receive(:announce_results)
+      game_play.play
+    end
+
+    it 'ends the game and announces a draw if the board is full and there is no winner' do
+      allow(game_play).to receive(:take_turn)
+      allow(board_play).to receive(:draw) # Allow draw method to be called
+      allow(board_play).to receive(:board_full?).and_return(true)
+      expect(game_play).to receive(:announce_results)
+      game_play.play
     end
   end
 end

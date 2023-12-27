@@ -9,7 +9,7 @@ class Game
     @player2 = player2
     @board = board
     @min = 0
-    @max = 5
+    @max = 6
     @current_player = @player1
   end
 
@@ -82,6 +82,21 @@ class Game
   end
 
   def play
+    loop do
+      @board.draw
+      take_turn
+      winner = check_winner
+      if winner
+        announce_results
+        @board.draw
+        break
+      elsif @board.board_full?
+        announce_results # Announce draw
+        @board.draw
+        break
+      end
+      switch_players
+    end
   end
 
   def player_input
