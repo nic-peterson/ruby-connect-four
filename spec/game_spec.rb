@@ -137,13 +137,72 @@ describe Game do
       end
     end
 
-    context 'when non-numeric input is given' do
-      before { allow(game_turn).to receive(:gets).and_return('invalid', '3') }
+    before do
+      game_turn.instance_variable_set(:@current_player, player1_turn)
+      game_turn.instance_variable_set(:@player1, player1_turn)
+      game_turn.instance_variable_set(:@player2, player2_turn)
+      allow(game_turn).to receive(:min).and_return(0)
+      allow(game_turn).to receive(:max).and_return(5)
+    end
 
-      xit 'prompts the player for a valid input when non-numeric input is given' do
-        allow(game_turn).to receive(:player_input).and_return('invalid', '3')
-        expect(game_turn).to receive(:puts).with(/X, choose a column:/).ordered
+    context 'when non-numeric input is given' do
+      before do
+        allow(game_turn).to receive(:player_input).and_return(nil, 3)
+      end
+
+      it 'prompts the player for a valid input' do
+        expect(game_turn).to receive(:puts).with(/#{player1.symbol}, choose a column:/).ordered
+        expect(game_turn)
+          .to receive(:puts)
+          .with(/Invalid move! #{player1.symbol}, please enter a number between #{game_turn.min} and #{game_turn.max}:/)
+          .ordered
+        game_turn.take_turn
+      end
+    end
+
+    context 'when the selected column is full' do
+      before do
+        allow(game_turn).to receive(:player_input).and_return(nil, 3)
+        allow(board_turn).to receive(:column_full?).and_return(true)
+      end
+
+      it 'prompts the player to select another column' do
+        expect(game_turn).to receive(:puts).with(/#{player1.symbol}, choose a column:/).ordered
         expect(game_turn).to receive(:puts).with(/Invalid move/).ordered
+        game_turn.take_turn
+      end
+    end
+
+    context 'when a player repeatedly enters invalid inputs' do
+      before do
+        game_turn.instance_variable_set(:@current_player, player1)
+        allow(game_turn).to receive(:player_input).and_return(nil, nil, 3)
+      end
+
+      it 'prompts the player to select another column' do
+        expect(game_turn).to receive(:puts).with(/#{player1.symbol}, choose a column:/).ordered.exactly(3).times
+        expect(game_turn)
+          .to receive(:puts)
+          .with(/Invalid move! #{player1.symbol}, please enter a number between #{game_turn.min} and #{game_turn.max}:/)
+          .ordered.exactly(2).times
+        game_turn.take_turn
+      end
+    end
+
+    context 'with boundary column inputs' do
+      it 'accepts the lowest valid column input' do
+        game_turn.instance_variable_set(:@current_player, player1)
+        allow(game_turn).to receive(:player_input).and_return(0)
+        allow(game_turn).to receive(:gets).and_return('0')
+        expect(board_turn).to receive(:add_piece).with(0, game_turn.current_player.symbol)
+        game_turn.take_turn
+      end
+
+      it 'accepts the highest valid column input' do
+        game_turn.instance_variable_set(:@current_player, player2)
+        allow(game_turn).to receive(:player_input).and_return(5)
+        allow(game_turn).to receive(:gets).and_return('5')
+        expect(board_turn).to receive(:add_piece).with(5, game_turn.current_player.symbol)
         game_turn.take_turn
       end
     end
