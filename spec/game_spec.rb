@@ -192,8 +192,8 @@ describe Game do
     subject(:game_check_draw) { described_class.new(player1_draw, player2_draw, stalemate_board) }
 
     context 'check for a draw' do
-      xit 'returns true' do
-        allow(stalemate_board).to receive(:is_full?).and_return(true)
+      it 'returns true' do
+        allow(stalemate_board).to receive(:board_full?).and_return(true)
 
         allow(player1_draw).to receive(:symbol).and_return('X')
         allow(player2_draw).to receive(:symbol).and_return('O')
@@ -203,8 +203,8 @@ describe Game do
         expect(draw).to eq(true)
       end
 
-      xit 'returns false because board not full' do
-        allow(stalemate_board).to receive(:is_full?).and_return(false)
+      it 'returns false because board not full' do
+        allow(stalemate_board).to receive(:board_full?).and_return(false)
 
         allow(player1_draw).to receive(:symbol).and_return('X')
         allow(player2_draw).to receive(:symbol).and_return('O')
@@ -214,8 +214,8 @@ describe Game do
         expect(draw).to eq(false)
       end
 
-      xit 'returns false because player1 is a winner' do
-        allow(stalemate_board).to receive(:is_full?).and_return(true)
+      it 'returns false because player1 is a winner' do
+        allow(stalemate_board).to receive(:board_full?).and_return(true)
         allow(player1_draw).to receive(:symbol).and_return('X')
         allow(player2_draw).to receive(:symbol).and_return('O')
         allow(stalemate_board).to receive(:winning_combination?).with(player1_draw.symbol).and_return(true)
@@ -224,8 +224,8 @@ describe Game do
         expect(draw).to eq(false)
       end
 
-      xit 'returns false because player2 is a winner' do
-        allow(stalemate_board).to receive(:is_full?).and_return(true)
+      it 'returns false because player2 is a winner' do
+        allow(stalemate_board).to receive(:board_full?).and_return(true)
         allow(player1_draw).to receive(:symbol).and_return('X')
         allow(player2_draw).to receive(:symbol).and_return('O')
         allow(stalemate_board).to receive(:winning_combination?).with(player1_draw.symbol).and_return(false)

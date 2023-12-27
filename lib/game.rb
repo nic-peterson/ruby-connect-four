@@ -49,7 +49,7 @@ class Game
 
   def check_draw
     # Check if board is full and no winning combination
-    if @board.is_full?
+    if @board.board_full?
       # Check if there is a winning combination return false
       if @board.winning_combination?(@player1.symbol) || @board.winning_combination?(@player2.symbol)
         return false
