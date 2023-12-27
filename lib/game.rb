@@ -22,18 +22,17 @@ class Game
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
 
-  def player_input
+  def take_turn
     loop do
-      user_input = gets.chomp
-      verified_number = verify_input(user_input.to_i) if user_input.match?(/^\d+$/)
-      return verified_number if verified_number
-
-      puts "Input error! Please enter a number between #{min} or #{max}."
+      puts "#{@current_player.name}, choose a column:"
+      column = player_input
+      if @board.column_full?(column)
+        puts "Invalid move. Column is full. Please choose another column."
+      else
+        @board.add_piece(column, @current_player.symbol)
+        break
+      end
     end
-  end
-
-  def verify_input(input)
-    return input if input.between?(@min, @max)
   end
 
   def update_board(column)
@@ -83,5 +82,31 @@ class Game
   end
 
   def play
+  end
+
+  def player_input
+    loop do
+      user_input = gets.chomp
+      verified_number = verify_input(user_input.to_i) if user_input.match?(/^\d+$/)
+      if verified_number
+        return verified_number
+      else
+        puts "Invalid move! #{@current_player.symbol}, please enter a number between #{@min} and #{@max}:"
+      end
+    end
+  end
+
+  def verify_input(input)
+    sanitized_input = input.to_i
+    if sanitized_input.between?(@min, @max)
+      return sanitized_input
+    else
+      return nil
+    end
+  end
+
+  def valid_column?(input)
+    column = input.to_i
+    column.between?(@min, @max)
   end
 end
